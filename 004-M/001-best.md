@@ -43,9 +43,9 @@ Manual Review
 ```solidity
 if (balance > IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS)) {
 IERC20Upgradeable(token).safeApprove(PREDICATE_ADDRESS,
-      balance - IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS) 
+      balance - IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS)
     );}
-    
+
 }
 
 ```

@@ -292,7 +292,7 @@ Looks ok
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/54 
 
 ## Found by 
-dipp, Tricko
+Tricko, dipp
 
 ## Summary
 A malicious user can block slashing by frontrunning `slash` with a call to `stake(1)` at the same block, allowing him to keep blocking calls to `slash` while waiting for his withdraw delay, effectively bypassing the slashing mechanism.
@@ -437,7 +437,7 @@ Looks ok
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/43 
 
 ## Found by 
-0xAgro, J4de, gmx, Inspex
+Inspex, J4de, 0xAgro, gmx
 
 ## Summary
 
@@ -594,7 +594,7 @@ Looks ok, but since `checkpointProtection` is removed it needs to be documented 
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/23 
 
 ## Found by 
-banditx0x, spyrosonic10
+spyrosonic10, banditx0x
 
 ## Summary
 StakingModule has core feature around staking, claim and withdraw. All these features has core and essential mechanism which is `delayed withdrawal`. In ideal scenario, user will stake X amount of token and will call `requestWithdrawal` when user want to withdraw his/her stake. `requestWithdrawal` will record user's request to withdraw and allow this user to withdraw only after `withdrawalDelay` is passed and during `withdrawalWindow` only. User can call `requestWithdrawal` in well advance before staking and this will allow user to bypass `withdrawalDelay`.
@@ -670,6 +670,44 @@ Considering this issue as a valid medium.
 As it just bypasses the delay mechanism. No direct funds are lost or any other significant impact for the issue to classify as high. 
 
 
+**spyrosonic10**
+
+Escalate for 10 USDC.
+
+While I agree that no direct funds are lost but `delayed withdrawal` is essential mechanism of `StakingModule`. So in my opinion bypassing an essential mechanism by user should be considered as `High` issue.
+
+
+**sherlock-admin**
+
+ > Escalate for 10 USDC.
+> 
+> While I agree that no direct funds are lost but `delayed withdrawal` is essential mechanism of `StakingModule`. So in my opinion bypassing an essential mechanism by user should be considered as `High` issue.
+> 
+
+You've created a valid escalation for 10 USDC!
+
+To remove the escalation from consideration: Delete your comment.
+
+You may delete or edit your escalation comment anytime before the 48-hour escalation window closes. After that, the escalation becomes final.
+
+**hrishibhat**
+
+Escalation rejected
+
+Not a valid high
+Bypassing delay mechanism in this case is not a valid high issue
+
+**sherlock-admin**
+
+> Escalation rejected
+> 
+> Not a valid high
+> Bypassing delay mechanism in this case is not a valid high issue
+
+This issue's escalations have been rejected!
+
+Watsons who escalated this issue will have their escalation amount deducted from their next payout.
+
 
 
 # Issue M-6: FeeBuyback.submit() method may fail if all allowance is not used by referral contract 
@@ -677,7 +715,7 @@ As it just bypasses the delay mechanism. No direct funds are lost or any other s
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/22 
 
 ## Found by 
-0xGoodess, spyrosonic10, ddimitrov22, jonatascm, jasonxiale
+jonatascm, jasonxiale, ddimitrov22, 0xGoodess, spyrosonic10
 
 ## Summary
 Inside `submit()` method of `FeeBuyback.sol`, if token is `_telcoin` then it safeApprove to `_referral` contract.   If `_referral` contract do not use all allowance then `submit()` method will fail in next call. 
@@ -719,67 +757,6 @@ https://github.com/telcoin/telcoin-audit/pull/3
 **dmitriia**
 
 Looks ok
-
-
-
-# Issue M-7: `transferERCToBridge` will not work for some tokens that don't support approve `2**256 - 1` amount. 
-
-Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/1 
-
-## Found by 
-volodya
-
-## Summary
-`transferERCToBridge` will not work for some tokens that don't support approve `2**256 - 1` amount.
-## Vulnerability Detail
-
-## Impact
-There are tokens that don't support approve spender `2**256 - 1` amount. So the transferERCToBridge will not work for some tokens like UNI who will revert when approve `2**256 - 1` amount. `Uni` is on the list that project promise to support
-
-```solidity
-    function approve(address spender, uint rawAmount) external returns (bool) {
-        uint96 amount;
-        if (rawAmount == uint(-1)) {
-            amount = uint96(-1);
-        } else {
-345:       amount = safe96(rawAmount, "Uni::approve: amount exceeds 96 bits");
-        }
-
-        allowances[msg.sender][spender] = amount;
-
-        emit Approval(msg.sender, spender, amount);
-        return true;
-    }
-```
-[code#L345](https://etherscan.io/token/0x1f9840a85d5af5bf1d1762f925bdaddc4201f984#code#L345)
-## Code Snippet
-```solidity
-31:  uint256 constant public MAX_INT = 2**256 - 1;
-
-70:  if (balance > IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS)) {IERC20Upgradeable(token).safeApprove(PREDICATE_ADDRESS, MAX_INT);}
-
-```
-[RootBridgeRelay.sol#L70](https://github.com/sherlock-audit/2023-02-telcoin/blob/main/telcoin-audit/contracts/bridge/RootBridgeRelay.sol#L70)
-## Tool used
-
-Manual Review
-
-## Recommendation
-```solidity
-if (balance > IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS)) {
-IERC20Upgradeable(token).safeApprove(PREDICATE_ADDRESS,
-      balance - IERC20Upgradeable(token).allowance(recipient, PREDICATE_ADDRESS)
-    );}
-
-}
-
-```
-
-## Discussion
-
-**dmitriia**
-
-Looks ok (PR#11)
 
 
 

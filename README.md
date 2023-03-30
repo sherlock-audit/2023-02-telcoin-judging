@@ -142,6 +142,11 @@ https://github.com/sherlock-audit/2023-02-telcoin/blob/main/telcoin-audit/contra
 
 Looks ok
 
+**jacksanford1**
+
+Admin note: This is the PR that was created and signed off on:
+https://github.com/telcoin/telcoin-audit/pull/10
+
 
 
 # Issue M-1: Account that is affiliated with a plugin can sometimes evade slashing 
@@ -437,7 +442,7 @@ Looks ok
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/43 
 
 ## Found by 
-Inspex, J4de, 0xAgro, gmx
+Inspex, gmx, J4de, 0xAgro
 
 ## Summary
 
@@ -461,6 +466,14 @@ Manual Review
 
 ## Recommendation
 Use the same mechanism as in StakingModule.sol to prevent user from withdrawing their funds if blacklisted so that front running won't be useful
+
+## Discussion
+
+**jacksanford1**
+
+Admin note: Protocol team confirmed the issue and labeled "Won't Fix." 
+
+
 
 # Issue M-4: StakingModule's stakedByAt() can report erroneous values 
 
@@ -594,7 +607,7 @@ Looks ok, but since `checkpointProtection` is removed it needs to be documented 
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/23 
 
 ## Found by 
-spyrosonic10, banditx0x
+banditx0x, spyrosonic10
 
 ## Summary
 StakingModule has core feature around staking, claim and withdraw. All these features has core and essential mechanism which is `delayed withdrawal`. In ideal scenario, user will stake X amount of token and will call `requestWithdrawal` when user want to withdraw his/her stake. `requestWithdrawal` will record user's request to withdraw and allow this user to withdraw only after `withdrawalDelay` is passed and during `withdrawalWindow` only. User can call `requestWithdrawal` in well advance before staking and this will allow user to bypass `withdrawalDelay`.
@@ -708,6 +721,11 @@ This issue's escalations have been rejected!
 
 Watsons who escalated this issue will have their escalation amount deducted from their next payout.
 
+**jacksanford1**
+
+Admin note: This is the PR that was created and signed off on:
+https://github.com/telcoin/telcoin-audit/pull/7
+
 
 
 # Issue M-6: FeeBuyback.submit() method may fail if all allowance is not used by referral contract 
@@ -715,7 +733,7 @@ Watsons who escalated this issue will have their escalation amount deducted from
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/22 
 
 ## Found by 
-jonatascm, jasonxiale, ddimitrov22, 0xGoodess, spyrosonic10
+spyrosonic10, jasonxiale, 0xGoodess, jonatascm, ddimitrov22
 
 ## Summary
 Inside `submit()` method of `FeeBuyback.sol`, if token is `_telcoin` then it safeApprove to `_referral` contract.   If `_referral` contract do not use all allowance then `submit()` method will fail in next call. 

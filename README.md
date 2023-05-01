@@ -136,6 +136,8 @@ https://github.com/sherlock-audit/2023-02-telcoin/blob/main/telcoin-audit/contra
     }
 ```
 
+
+
 ## Discussion
 
 **dmitriia**
@@ -146,8 +148,6 @@ Looks ok
 
 Admin note: This is the PR that was created and signed off on:
 https://github.com/telcoin/telcoin-audit/pull/10
-
-
 
 # Issue M-1: Account that is affiliated with a plugin can sometimes evade slashing 
 
@@ -280,6 +280,8 @@ https://github.com/sherlock-audit/2023-02-telcoin/blob/main/telcoin-audit/contra
     }
 ```
 
+
+
 ## Discussion
 
 **amshirif**
@@ -289,8 +291,6 @@ https://github.com/telcoin/telcoin-audit/pull/5
 **dmitriia**
 
 Looks ok
-
-
 
 # Issue M-2: `slash` calls can be blocked, allowing malicious users to bypass the slashing mechanism. 
 
@@ -421,6 +421,8 @@ Manual Review
 ## Recommendation
 Consider implementing a specific version of `_claimAndExit` without the `checkpointProtection` modifier, to be used inside the `slash` function. 
 
+
+
 ## Discussion
 
 **amshirif**
@@ -435,14 +437,12 @@ https://github.com/telcoin/telcoin-audit/pull/6
 
 Looks ok
 
-
-
 # Issue M-3: Front Run of addBlackList() function 
 
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/43 
 
 ## Found by 
-Inspex, gmx, J4de, 0xAgro
+0xAgro, Inspex, J4de, gmx
 
 ## Summary
 
@@ -467,13 +467,13 @@ Manual Review
 ## Recommendation
 Use the same mechanism as in StakingModule.sol to prevent user from withdrawing their funds if blacklisted so that front running won't be useful
 
+
+
 ## Discussion
 
 **jacksanford1**
 
 Admin note: Protocol team confirmed the issue and labeled "Won't Fix." 
-
-
 
 # Issue M-4: StakingModule's stakedByAt() can report erroneous values 
 
@@ -586,6 +586,8 @@ https://github.com/sherlock-audit/2023-02-telcoin/blob/main/telcoin-audit/contra
 
 This way both staking and unstaking will be restricted to once per block due to the usage of Checkpoints, which needs to be documented as a known limitation.
 
+
+
 ## Discussion
 
 **amshirif**
@@ -599,8 +601,6 @@ https://github.com/telcoin/telcoin-audit/pull/6
 **dmitriia**
 
 Looks ok, but since `checkpointProtection` is removed it needs to be documented that stakedByAt() and balanceOfAt() return first known state instead of the final state of any block due to Checkpoints logic.
-
-
 
 # Issue M-5: Withdraw delay can be bypassed 
 
@@ -671,6 +671,8 @@ Consider resetting `withdrawalRequestTimestamps` when user stake any amount of t
     }
 ```
 
+
+
 ## Discussion
 
 **dmitriia**
@@ -726,14 +728,12 @@ Watsons who escalated this issue will have their escalation amount deducted from
 Admin note: This is the PR that was created and signed off on:
 https://github.com/telcoin/telcoin-audit/pull/7
 
-
-
 # Issue M-6: FeeBuyback.submit() method may fail if all allowance is not used by referral contract 
 
 Source: https://github.com/sherlock-audit/2023-02-telcoin-judging/issues/22 
 
 ## Found by 
-spyrosonic10, jasonxiale, 0xGoodess, jonatascm, ddimitrov22
+0xGoodess, ddimitrov22, jasonxiale, jonatascm, spyrosonic10
 
 ## Summary
 Inside `submit()` method of `FeeBuyback.sol`, if token is `_telcoin` then it safeApprove to `_referral` contract.   If `_referral` contract do not use all allowance then `submit()` method will fail in next call. 
@@ -766,6 +766,8 @@ _telcoin.safeApprove(address(_referral), 0);
 _telcoin.safeApprove(address(_referral), _telcoin.balanceOf(address(this)));
 ```
 
+
+
 ## Discussion
 
 **amshirif**
@@ -775,6 +777,4 @@ https://github.com/telcoin/telcoin-audit/pull/3
 **dmitriia**
 
 Looks ok
-
-
 
